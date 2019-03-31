@@ -18,4 +18,10 @@ export class AuthenticationComponent implements OnInit {
     })
   }
 
+  login() {
+    if (this.loginForm.valid) {
+      console.log('Logging in with: ', this.loginForm.value);
+    }
+  }
+
 }
