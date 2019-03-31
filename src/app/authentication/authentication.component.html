@@ -22,7 +22,31 @@
                 (click)="login()">Login</button>
             </form>
           </mat-tab>
-          <mat-tab label="Sign Up"> Content 2 </mat-tab>
+
+          <mat-tab label="Sign Up">
+            <form class="col-12 my-5" [formGroup]="signupForm" (submit)="login()">
+
+              <mat-form-field style="width: 100%">
+                <input matInput type="text" required formControlName="username" placeholder="Username"
+                  autocomplete="off">
+              </mat-form-field>
+              <p class="alert-danger">Username is not available</p>
+
+              <mat-form-field style="width:100%">
+                <input matInput type="password" required formControlName="password" placeholder="Password">
+              </mat-form-field>
+
+              <mat-form-field style="width:100%">
+                <input matInput type="password" required formControlName="confirmPassword"
+                  placeholder="Confirm Password">
+                <mat-error *ngIf="password.value!=confirmPassword.value">passwords do not
+                  match</mat-error>
+              </mat-form-field>
+
+              <button mat-raised-button color="primary" class="col-12 my-2" type="submit"
+                (click)="signup()">Signup</button>
+            </form>
+          </mat-tab>
         </mat-tab-group>
       </mat-card-content>
     </mat-card>
