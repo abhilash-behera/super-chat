@@ -6,6 +6,7 @@ var mongoose = require('mongoose');
 mongoose.Promise = require('bluebird');
 const PORT = process.env.PORT || 3000;
 const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/super-chat";
+var auth = require('./routes/auth');
 
 // Middlewares
 app.use(bodyParser.json());
@@ -16,6 +17,9 @@ app.use(express.static(__dirname + "/dist/super-chat"));
 app.get("/*", (req, res) => {
     res.sendFile(__dirname + "/dist/super-chat/index.html");
 })
+
+// Backend Routes
+app.use('/auth', auth);
 
 
 

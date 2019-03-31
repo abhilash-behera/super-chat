@@ -14,7 +14,7 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 //Angular material components
 import {
   MatCardModule, MatTabsModule, MatIconModule, MatInputModule,
-  MatFormFieldModule, MatButtonModule
+  MatFormFieldModule, MatButtonModule, MatProgressBarModule
 } from '@angular/material';
 
 @NgModule({
@@ -36,7 +36,8 @@ import {
     MatIconModule,
     MatInputModule,
     MatFormFieldModule,
-    MatButtonModule
+    MatButtonModule,
+    MatProgressBarModule
   ],
   providers: [],
   bootstrap: [AppComponent]
