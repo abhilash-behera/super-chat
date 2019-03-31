@@ -1,0 +1,27 @@
+<div class="container col-12" style="height:100%; position:absolute;background-color: #efefef">
+  <div class="row" style="background-color: var(--primary);height: 50%;"></div>
+  <div class="row justify-content-center align-items-center" style="height: 100%;position:absolute;top:0;width: 100%">
+    <mat-card class="col-12 col-lg-4" style="height: 500px">
+      <mat-card-header>
+        <h3>Authentication</h3>
+      </mat-card-header>
+
+      <mat-card-content>
+        <mat-tab-group>
+          <mat-tab label="Login">
+            <form class="col-12 my-5" [formGroup]="loginForm">
+              <mat-form-field style="width: 100%">
+                <input matInput type="text" required formControlName="username" placeholder="Username">
+              </mat-form-field>
+
+              <mat-form-field style="width:100%">
+                <input matInput type="password" required formControlName="password" placeholder="Password">
+              </mat-form-field>
+            </form>
+          </mat-tab>
+          <mat-tab label="Sign Up"> Content 2 </mat-tab>
+        </mat-tab-group>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

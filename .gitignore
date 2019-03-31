@@ -5,6 +5,10 @@
 /tmp
 /out-tsc
 
+/data/db/*
+
+.env
+
 # dependencies
 /node_modules
 
