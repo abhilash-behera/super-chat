@@ -37,11 +37,14 @@
             <form class="col-12 my-5" [formGroup]="signupForm" (submit)="login()">
 
               <mat-form-field style="width: 100%">
-                <input matInput type="text" required formControlName="username" placeholder="Username"
-                  autocomplete="off">
+                <input matInput type="text" required formControlName="username" placeholder="Username (min length 3)"
+                  autocomplete="off" minlength="3">
                 <mat-error *ngIf="signupUsername.hasError('required')">Username is <strong>required</strong></mat-error>
               </mat-form-field>
-              <p class="alert-danger">Username is not available</p>
+              <p *ngIf="!checkingUsername && signupUsername.value.length>2"
+                [ngClass]="{'alert-success':usernameAvailable,'alert-danger':!usernameAvailable}">
+                {{usernameAvailable?'Username is available':'Username not available'}}
+              </p>
 
               <mat-form-field style="width:100%">
                 <input matInput type="password" required formControlName="password" placeholder="Password">
@@ -54,9 +57,9 @@
                 <mat-error *ngIf="signupPassword.value!=signupConfirmPassword.value">passwords do not
                   match</mat-error>
               </mat-form-field>
-
-              <button mat-raised-button color="primary" class="col-12 my-2" type="submit"
-                (click)="signup()">Signup</button>
+              <mat-progress-bar mode="indeterminate" *ngIf="signingUp"></mat-progress-bar>
+              <button mat-raised-button color="primary" class="col-12 my-2" type="submit" (click)="signup()"
+                [disabled]="signingUp">Signup</button>
             </form>
           </mat-tab>
         </mat-tab-group>

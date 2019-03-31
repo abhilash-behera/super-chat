@@ -7,8 +7,8 @@ var UserSchema = mongoose.Schema({
 });
 
 const USER_STATUS = {
-    online: 'online',
-    offline: 'offline'
+    ONLINE: 'online',
+    OFFLINE: 'offline'
 }
 
 module.exports = { User: mongoose.model('user', UserSchema), UserStatus: USER_STATUS };

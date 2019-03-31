@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { ApiService } from '../api.service';
 import { Router } from '@angular/router';
+import { debounceTime, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-authentication',
@@ -14,6 +15,9 @@ export class AuthenticationComponent implements OnInit {
   loggingIn: Boolean;
   success: String;
   error: String;
+  usernameAvailable: Boolean;
+  checkingUsername: Boolean;
+  signingUp: Boolean;
 
   constructor(private formBuilder: FormBuilder, private apiService: ApiService,
     private router: Router) { }
@@ -28,6 +32,31 @@ export class AuthenticationComponent implements OnInit {
       username: ['', Validators.required],
       password: ['', Validators.required],
       confirmPassword: ['', Validators.required]
+    })
+
+    this.signupForm.get('username').valueChanges.pipe(
+      debounceTime(600),
+      tap(value => console.log('Searching for: ', value))
+    ).subscribe(data => {
+      this.checkingUsername = true;
+      this.apiService.checkUsernameAvailability(data).subscribe(
+        data => {
+          this.checkingUsername = false;
+          if (data.success) {
+            if (data.data.usernameAvailable) {
+              console.log('Username available')
+              this.usernameAvailable = true;
+            } else {
+              console.log('Username not available')
+              this.usernameAvailable = false;
+            }
+          }
+        },
+        error => {
+          this.checkingUsername = false;
+          this.showErrorMessage("Connection Problem", 2000);
+        }
+      )
     })
   }
 
@@ -55,7 +84,30 @@ export class AuthenticationComponent implements OnInit {
   }
 
   signup() {
-
+    if (this.signupForm.valid) {
+      if (this.usernameAvailable) {
+        if (this.signupPassword.value === this.signupConfirmPassword.value) {
+          this.signingUp = true;
+          this.apiService.signup(this.signupForm.value).subscribe(
+            data => {
+              this.signingUp = false;
+              if (data.success) {
+                this.success = data.data.msg;
+                window.location.reload();
+              }
+            },
+            error => {
+              this.signingUp = false;
+              this.showErrorMessage("Connection Problem", 2000);
+            }
+          )
+        } else {
+          this.showErrorMessage("Passwords do not match", 2000);
+        }
+      } else {
+        this.showErrorMessage("Choose a different username", 2000);
+      }
+    }
   }
 
   get loginUsername(): AbstractControl {
