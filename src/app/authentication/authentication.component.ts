@@ -67,6 +67,7 @@ export class AuthenticationComponent implements OnInit {
         data => {
           if (data.success) {
             this.success = data.data.msg;
+            localStorage.setItem('token', data.data.token);
             setTimeout(() => {
               this.router.navigate(['/dashboard']);
             })

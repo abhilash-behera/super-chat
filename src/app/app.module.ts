@@ -14,15 +14,19 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 //Angular material components
 import {
   MatCardModule, MatTabsModule, MatIconModule, MatInputModule,
-  MatFormFieldModule, MatButtonModule, MatProgressBarModule
+  MatFormFieldModule, MatButtonModule, MatProgressBarModule, MatDividerModule
 } from '@angular/material';
+import { SessionExpiredDialogComponent } from './session-expired-dialog/session-expired-dialog.component';
+import { AddNewChatDialogComponent } from './add-new-chat-dialog/add-new-chat-dialog.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     AuthenticationComponent,
     DashboardComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    SessionExpiredDialogComponent,
+    AddNewChatDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -37,7 +41,8 @@ import {
     MatInputModule,
     MatFormFieldModule,
     MatButtonModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    MatDividerModule
   ],
   providers: [],
   bootstrap: [AppComponent]

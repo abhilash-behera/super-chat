@@ -1,3 +1,49 @@
-<p>
-  dashboard works!
-</p>
+<div class="container col-12" style="height:100%; position:absolute;background-color: #d4dbd9">
+  <div class="row" style="background-color: var(--primary);height: 10%;"></div>
+  <div class="row justify-content-center align-items-center" style="height: 100%;position:absolute;top:0;width: 100%">
+    <mat-card class="col-12 col-lg-4" style="height: 95%;min-width:75%;padding:0">
+      <mat-card-content style="height:100%">
+        <div class="col-12 col-lg-4" style="border:1px solid #e4e6e6;height:100%">
+          <div class="row px-2 py-2 align-items-center"
+            style="background-color:#eeeeee;border-bottom:5px solid var(--primary)">
+            <div class="col" style="display: contents">
+              <img src="../../assets/profile_pic.png" style="border-radius: 50%;height:40px;width: 40px">
+            </div>
+            <div class="col">
+              <h4 style="margin-bottom:0">username</h4>
+
+            </div>
+            <div class="col" style="display:contents">
+              <button mat-icon-button>
+                <mat-icon>logout</mat-icon>
+              </button>
+            </div>
+          </div>
+
+
+
+          <div class="row px-2 py-2 align-items-center chat-menu-item">
+            <div class="col" style="display: contents">
+              <img src="../../assets/profile_pic.png" style="border-radius: 50%;height:40px;width: 40px">
+            </div>
+            <div class="col">
+              <h5 style="margin-bottom:0">username</h5>
+            </div>
+            <div class="col" style="display:contents">
+              <span class="new-msg-count">11</span>
+            </div>
+          </div>
+
+          <div class="row px-2 py-2 justify-content-center chat-menu-item" style="text-align: center">
+            <span>
+              <mat-icon>add</mat-icon>
+            </span>Add New Chat
+          </div>
+        </div>
+        <div class="col-12 col-lg-8">
+
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
