@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -19,5 +19,14 @@ export class ApiService {
 
   signup(body: any): Observable<any> {
     return this.httpClient.post('/auth/signup', body);
+  }
+
+  fetchUsers(): Observable<any> {
+    return this.httpClient.post('/api/getUsers', {}, { headers: this.getHeaders() });
+  }
+
+  getHeaders(): HttpHeaders {
+    let httpHeaders: HttpHeaders = new HttpHeaders().set("token", localStorage.getItem('token'));
+    return httpHeaders;
   }
 }

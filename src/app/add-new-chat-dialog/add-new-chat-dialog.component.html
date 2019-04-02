@@ -1,3 +1,23 @@
-<p>
-  add-new-chat-dialog works!
-</p>
+<h2 mat-dialog-title>Select an user</h2>
+<mat-dialog-content>
+  <mat-list dense>
+    <mat-list-item>
+      <div class="row py-2 px-2" *ngFor="let user of users">
+        <div class="col">
+          <div class="row">
+            <h5 style="margin:0">{{user.username}}</h5>
+          </div>
+        </div>
+        <div class="col">
+          <div class="row justify-content-end">
+            <span class="px-1 py-1" style="background-color: green"></span>
+          </div>
+        </div>
+      </div>
+    </mat-list-item>
+
+  </mat-list>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-dialog-close mat-raised-button color="warn">Cancel</button>
+</mat-dialog-actions>

@@ -14,7 +14,7 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 //Angular material components
 import {
   MatCardModule, MatTabsModule, MatIconModule, MatInputModule,
-  MatFormFieldModule, MatButtonModule, MatProgressBarModule, MatDividerModule
+  MatFormFieldModule, MatButtonModule, MatProgressBarModule, MatDividerModule, MatDialogModule, MatListModule, MatSnackBarModule
 } from '@angular/material';
 import { SessionExpiredDialogComponent } from './session-expired-dialog/session-expired-dialog.component';
 import { AddNewChatDialogComponent } from './add-new-chat-dialog/add-new-chat-dialog.component';
@@ -42,9 +42,13 @@ import { AddNewChatDialogComponent } from './add-new-chat-dialog/add-new-chat-di
     MatFormFieldModule,
     MatButtonModule,
     MatProgressBarModule,
-    MatDividerModule
+    MatDividerModule,
+    MatDialogModule,
+    MatListModule,
+    MatSnackBarModule
   ],
   providers: [],
+  entryComponents: [AddNewChatDialogComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -7,6 +7,7 @@ mongoose.Promise = require('bluebird');
 const PORT = process.env.PORT || 3000;
 const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/super-chat";
 var auth = require('./routes/auth');
+var api = require('./routes/api');
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 const JWT_SECRET = process.env.JWT_SECRET;
@@ -26,6 +27,7 @@ app.get("/*", (req, res) => {
 
 // Backend Routes
 app.use('/auth', auth);
+app.use('/api', api);
 
 mongoose.connect(MONGODB_URI, { useNewUrlParser: true }, err => {
     if (err) {
