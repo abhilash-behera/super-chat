@@ -2,6 +2,7 @@ const router = require('express').Router();
 const jwt = require('jsonwebtoken');
 const User = require('../models/user').User;
 var jwt_secret = process.env.JWT_SECRET || "secret";
+var Chat = require('../models/chat');
 
 // authorization middleware
 router.use((req, res, next) => {
@@ -57,6 +58,31 @@ router.post('/getUsers', (req, res) => {
                 }
             }
         });
+})
+
+router.post('/addNewChat', (req, res) => {
+    let message = "Hey, I have started a new chat thread with you. Let's chat here";
+    let chat = new Chat({
+        participants: [req.body.authorizedUser._id, req.body.user._id];
+        messages: [
+            {
+                to: req.body.user._id,
+                from: req.body.authorizedUser._id,
+                message: message,
+                timestamp: new Date().getTime()
+            }
+        ]
+    });
+
+    chat.save(err => {
+        if (err) {
+            console.log('Error in adding new chat: ', err);
+            res.json({ success: false, data: { msg: 'Something went wrong. Please try again.' } })
+        } else {
+            console.log('Chat created successfully');
+            res.json({ success: true, data: { msg: 'Chat created successfully' } });
+        }
+    })
 })
 
 module.exports = router;

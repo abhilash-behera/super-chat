@@ -3,6 +3,7 @@ import { ApiService } from '../api.service';
 import { SocketService } from '../socket.service';
 import { MatDialog } from '@angular/material';
 import { AddNewChatDialogComponent } from '../add-new-chat-dialog/add-new-chat-dialog.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
@@ -14,7 +15,8 @@ export class DashboardComponent implements OnInit {
   constructor(
     private apiService: ApiService,
     private socketService: SocketService,
-    private matDialog: MatDialog) { }
+    private matDialog: MatDialog,
+    private router: Router) { }
 
   ngOnInit() {
     this.socketService.connect();
@@ -34,13 +36,18 @@ export class DashboardComponent implements OnInit {
   }
 
   openAddChatDialog() {
-    this.matDialog.open(AddNewChatDialogComponent).afterClosed().subscribe(
+    this.matDialog.open(AddNewChatDialogComponent, { width: "500px"}).afterClosed().subscribe(
       data => {
         if (data && data.refresh) {
 
         }
       }
     )
+  }
+
+  logout() {
+    localStorage.clear();
+    this.router.navigate(['authentication']);
   }
 
 }

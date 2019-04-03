@@ -25,8 +25,13 @@ export class ApiService {
     return this.httpClient.post('/api/getUsers', {}, { headers: this.getHeaders() });
   }
 
+  addNewChat(user: any): Observable<any> {
+    return this.httpClient.post('/api/addNewChat', { user: user }, { headers: this.getHeaders() })
+  }
+
   getHeaders(): HttpHeaders {
     let httpHeaders: HttpHeaders = new HttpHeaders().set("token", localStorage.getItem('token'));
     return httpHeaders;
   }
+
 }

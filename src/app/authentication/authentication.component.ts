@@ -91,10 +91,17 @@ export class AuthenticationComponent implements OnInit {
           this.signingUp = true;
           this.apiService.signup(this.signupForm.value).subscribe(
             data => {
-              this.signingUp = false;
               if (data.success) {
                 this.success = data.data.msg;
-                window.location.reload();
+                setTimeout(() => {
+                  window.location.reload();
+                }, 2000, this);
+              } else {
+                this.signingUp = false;
+                this.error = data.data.msg;
+                setTimeout(() => {
+                  this.error = null;
+                }, 3000, this);
               }
             },
             error => {
