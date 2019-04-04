@@ -1,7 +1,14 @@
 <h2 mat-dialog-title>Select an user</h2>
+<div class="alert alert-success" *ngIf="success">
+  <strong>Success:</strong>{{success}}
+</div>
+
+<div class="alert alert-danger" *ngIf="error">
+  <strong>Error:</strong>{{error}}
+</div>
 <mat-dialog-content>
   <mat-list>
-    <mat-list-item class="user-list-item" *ngFor="let user of users">
+    <mat-list-item class="user-list-item" *ngFor="let user of users" (click)="addNewChat(user)">
       <mat-divider></mat-divider>
       <div class="row py-2" matRipple matRippleColor="#eeeeee" style="width: 100%">
         <div class="col-2">
@@ -26,6 +33,7 @@
   </mat-list>
 </mat-dialog-content>
 <mat-dialog-actions>
+  <mat-progress-bar mode="indeterminate" *ngIf="addingNewChat"></mat-progress-bar>
   <div class="row justify-content-end" style="width:100%">
     <button style="outline: none" mat-dialog-close mat-raised-button color="warn">Cancel</button>
   </div>

@@ -63,13 +63,14 @@ router.post('/getUsers', (req, res) => {
 router.post('/addNewChat', (req, res) => {
     let message = "Hey, I have started a new chat thread with you. Let's chat here";
     let chat = new Chat({
-        participants: [req.body.authorizedUser._id, req.body.user._id];
+        participants: [req.body.authorizedUser._id, req.body.user._id],
         messages: [
             {
                 to: req.body.user._id,
                 from: req.body.authorizedUser._id,
                 message: message,
-                timestamp: new Date().getTime()
+                timestamp: new Date().getTime(),
+                status: "unread"
             }
         ]
     });
@@ -84,5 +85,22 @@ router.post('/addNewChat', (req, res) => {
         }
     })
 })
+
+router.post('/fetchSelfData', (req, res) => {
+    res.send({ success: true, data: { msg: 'Self data fetched successfully', selfData: req.body.authorizedUser } });
+})
+router.post('/fetchChats', (req, res) => {
+    Chat.find({ participants: req.body.authorizedUser._id })
+        .populate({ path: 'participants', select: { password: 0 }, model: 'user' })
+        .exec((err, chats) => {
+            if (err) {
+                console.log('Error in fetching chats: ', err);
+                res.json({ success: false, data: { msg: 'Something went wrong. Please try again.' } })
+            } else {
+                res.json({ success: true, data: { msg: 'Chats fetched successfully.', chats: chats } });
+            }
+        })
+
+});
 
 module.exports = router;

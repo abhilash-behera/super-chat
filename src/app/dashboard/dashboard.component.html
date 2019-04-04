@@ -21,12 +21,13 @@
 
 
 
-          <div class="row px-2 py-2 align-items-center chat-menu-item">
+          <div *ngFor="let chat of chats" class="row px-2 py-2 align-items-center chat-menu-item">
             <div class="col" style="display: contents">
-              <img src="../../assets/profile_pic.png" style="border-radius: 50%;height:40px;width: 40px">
+              <img src="../../assets/profile_pic.png"
+                style="border-radius: 50%;height:40px;width: 40px;border:1px solid #c3c3c3">
             </div>
             <div class="col">
-              <h5 style="margin-bottom:0">username</h5>
+              <h5 style="margin-bottom:0">{{getOppositeUser(chat.participants).username}}</h5>
             </div>
             <div class="col" style="display:contents">
               <span class="new-msg-count">11</span>
@@ -41,7 +42,15 @@
           </div>
         </div>
         <div class="col-12 col-lg-8">
+          <div class="alert alert-success" *ngIf="success">
+            <strong>Success:</strong>{{success}}
+          </div>
 
+          <div class="alert alert-danger" *ngIf="error">
+            <strong>Error:</strong>{{error}}
+          </div>
+
+          <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
         </div>
       </mat-card-content>
     </mat-card>

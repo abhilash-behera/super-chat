@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../api.service';
-import { MatDialog, MatSnackBar } from '@angular/material';
+import { MatDialog, MatSnackBar, MatDialogRef } from '@angular/material';
 
 @Component({
   selector: 'app-add-new-chat-dialog',
@@ -10,7 +10,13 @@ import { MatDialog, MatSnackBar } from '@angular/material';
 export class AddNewChatDialogComponent implements OnInit {
 
   users: any[] = [];
-  constructor(private apiService: ApiService, private matSnackbar: MatSnackBar) {
+  addingNewChat: Boolean;
+  success: String;
+  error: String;
+  constructor(
+    private apiService: ApiService,
+    private matSnackbar: MatSnackBar,
+    public matDialogRef: MatDialogRef<AddNewChatDialogComponent>) {
 
   }
 
@@ -20,7 +26,37 @@ export class AddNewChatDialogComponent implements OnInit {
         if (data.success) {
           this.users = data.data.users;
           this.matSnackbar.open("Users fetched successfully", "Okay", { duration: 2000 });
+        } else {
+          this.error = data.data.msg;
         }
+      },
+      error => {
+        this.error = "Connection Problem";
+      }
+    )
+  }
+
+  addNewChat(user: any) {
+    this.addingNewChat = true;
+    this.apiService.addNewChat(user).subscribe(
+      data => {
+        if (data.success) {
+          this.success = data.data.success;
+          setTimeout(() => {
+            this.matDialogRef.close({ refresh: true });
+          }, 2000, this);
+        } else {
+          this.error = data.data.msg;
+          setTimeout(() => {
+            this.error = null;
+          }, 2000, this);
+        }
+      },
+      error => {
+        this.error = "Connection Problem";
+        setTimeout(() => {
+          this.error = null;
+        }, 2000, this);
       }
     )
   }

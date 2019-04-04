@@ -11,6 +11,11 @@ import { Router } from '@angular/router';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
+  chats: any[] = [];
+  success: String;
+  error: String;
+  loading: Boolean;
+  selfData: any;
 
   constructor(
     private apiService: ApiService,
@@ -33,13 +38,61 @@ export class DashboardComponent implements OnInit {
         }
       )
     });
+
+    this.fetchSelfData();
+    this.fetchChats();
+  }
+
+  fetchSelfData() {
+    this.apiService.fetchSelfData().subscribe(
+      data => {
+        if (data.success) {
+          this.selfData = data.data.selfData;
+        } else {
+          this.error = data.data.msg;
+          setTimeout(() => {
+            this.error = null;
+          }, 2000, this);
+        }
+      },
+      error => {
+        this.error = "Connection Problem";
+        setTimeout(() => {
+          this.error = null;
+        }, 2000, this);
+      }
+    )
+  }
+
+  fetchChats() {
+    this.loading = true;
+    this.apiService.fetchChats().subscribe(
+      data => {
+        this.loading = false;
+        if (data.success) {
+          this.chats = data.data.chats;
+          console.log('Fetched chats: ', this.chats);
+        } else {
+          this.error = data.data.msg;
+          setTimeout(() => {
+            this.error = null;
+          }, 2000, this);
+        }
+      },
+      error => {
+        this.error = "Connection Problem";
+        setTimeout(() => {
+          this.error = null;
+        }, 2000, this);
+      }
+    )
   }
 
   openAddChatDialog() {
-    this.matDialog.open(AddNewChatDialogComponent, { width: "500px"}).afterClosed().subscribe(
+    this.matDialog.open(AddNewChatDialogComponent, { width: "500px" }).afterClosed().subscribe(
       data => {
         if (data && data.refresh) {
-
+          this.fetchChats();
         }
       }
     )
@@ -48,6 +101,16 @@ export class DashboardComponent implements OnInit {
   logout() {
     localStorage.clear();
     this.router.navigate(['authentication']);
+  }
+
+  getOppositeUser(participants: any[]): any {
+    let otherUser = null;
+    participants.forEach(participant => {
+      if (participant._id != this.selfData._id) {
+        otherUser = participant;
+      }
+    });
+    return otherUser;
   }
 
 }
