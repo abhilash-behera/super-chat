@@ -135,6 +135,7 @@ export class DashboardComponent implements OnInit {
 
   selectChat(chat) {
     this.selectedChat = chat;
+    this.markAsRead(chat);
   }
 
   sendMessage(event) {
@@ -158,6 +159,32 @@ export class DashboardComponent implements OnInit {
         }
       });
     }
+  }
+
+  getUnreadMessagesCount(messages: any[]) {
+    let count = 0;
+    messages.forEach(message => {
+      if (message.from != this.selfData._id && message.status === 'unread') {
+        count++;
+      }
+    });
+    return count;
+  }
+
+  markAsRead(chat: any) {
+    chat.messages.forEach(message => {
+      if (message.from != this.selfData._id) {
+        message.status = "read";
+      }
+    });
+
+    this.socketService.socket.emit('markAsRead', { chatId: chat._id, userId: this.getOppositeUser(chat.participants)._id }, callback => {
+      if (callback.success) {
+        console.log('Messages marked as read successfully');
+      } else {
+        console.log('Could not mark messages as read: ', callback.data.msg);
+      }
+    });
   }
 
 }

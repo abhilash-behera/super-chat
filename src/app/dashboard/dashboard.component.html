@@ -33,7 +33,8 @@
                 <h5 style="margin-bottom:0">{{getOppositeUser(chat.participants).username}}</h5>
               </div>
               <div class="col" style="display:contents">
-                <span class="new-msg-count">11</span>
+                <span class="new-msg-count"
+                  *ngIf="getUnreadMessagesCount(chat.messages)!=0">{{getUnreadMessagesCount(chat.messages)}}</span>
               </div>
             </div>
 

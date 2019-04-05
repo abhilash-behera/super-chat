@@ -129,6 +129,37 @@ io.on('connection', function (socket) {
                 }
             })
     })
+
+    socket.on('markAsRead', (data, callback) => {
+        Chat.findOne({ _id: data.chatId })
+            .exec((err, chat) => {
+                if (err) {
+                    console.log('Error in finding chat: ', err);
+                    callback({ success: false, data: { msg: 'Something went wrong. Please try again.' } })
+                } else {
+                    if (chat) {
+                        chat.messages.forEach(message => {
+                            if (message.from == data.userId) {
+                                message.status = "read";
+                            }
+                        });
+
+                        chat.save(err => {
+                            if (err) {
+                                console.log('Error in updating chat: ', err);
+                                callback({ success: false, data: { msg: 'Something went wrong. Please try again.' } })
+                            } else {
+                                console.log('Chat updated successfully');
+                                callback({ success: true, data: { msg: 'Chat updated successfully' } });
+                            }
+                        })
+                    } else {
+                        console.log('Chat not found with id: ', data.chatId);
+                        callback({ success: false, data: { msg: 'Sorry chat not found' } });
+                    }
+                }
+            })
+    });
 });
 
 http.listen(PORT, err => {
