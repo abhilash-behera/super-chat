@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, } from '@angular/core';
 import { ApiService } from '../api.service';
 import { SocketService } from '../socket.service';
 import { MatDialog } from '@angular/material';
 import { AddNewChatDialogComponent } from '../add-new-chat-dialog/add-new-chat-dialog.component';
 import { Router } from '@angular/router';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-dashboard',
@@ -16,12 +17,18 @@ export class DashboardComponent implements OnInit {
   error: String;
   loading: Boolean;
   selfData: any;
+  selectedChat: any;
+  sendMessageForm: FormGroup
 
   constructor(
     private apiService: ApiService,
     private socketService: SocketService,
     private matDialog: MatDialog,
-    private router: Router) { }
+    private router: Router,
+    private formBuilder: FormBuilder) { }
+
+  @ViewChild('scrollMe') scrollMe: ElementRef;
+  scrollTop: number;
 
   ngOnInit() {
     this.socketService.connect();
@@ -39,8 +46,21 @@ export class DashboardComponent implements OnInit {
       )
     });
 
+    this.socketService.socket.on("message", data => {
+      this.chats.forEach(chat => {
+        if (chat._id === data.chatId) {
+          chat.messages.push(data.message);
+        }
+      })
+    });
+
+
+
     this.fetchSelfData();
     this.fetchChats();
+    this.sendMessageForm = this.formBuilder.group({
+      message: ['', Validators.required]
+    });
   }
 
   fetchSelfData() {
@@ -111,6 +131,33 @@ export class DashboardComponent implements OnInit {
       }
     });
     return otherUser;
+  }
+
+  selectChat(chat) {
+    this.selectedChat = chat;
+  }
+
+  sendMessage(event) {
+    if (this.sendMessageForm.valid) {
+      let payload = {
+        chatId: this.selectedChat._id,
+        message: {
+          to: this.getOppositeUser(this.selectedChat.participants)._id,
+          from: this.selfData._id,
+          message: this.sendMessageForm.value.message,
+          timestamp: new Date().getTime(),
+          status: "unread"
+        }
+      }
+
+      this.socketService.socket.emit('message', payload, callback => {
+        console.log('callback: ', callback);
+        if (callback.success) {
+          this.sendMessageForm.get('message').setValue('');
+          this.selectedChat.messages.push(payload.message);
+        }
+      });
+    }
   }
 
 }

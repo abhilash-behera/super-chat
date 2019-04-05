@@ -14,6 +14,7 @@ const JWT_SECRET = process.env.JWT_SECRET;
 const User = require('./models/user').User;
 const UserStatus = require('./models/user').UserStatus;
 var jwt = require('jsonwebtoken');
+const Chat = require('./models/chat');
 
 // Middlewares
 app.use(bodyParser.json());
@@ -96,6 +97,37 @@ io.on('connection', function (socket) {
                 }
             }
         })
+    })
+
+    socket.on("message", (data, callback) => {
+        Chat.findOne({ _id: data.chatId })
+            .populate('participants', {}, 'user')
+            .exec((err, chat) => {
+                if (err) {
+                    console.log('Error in finding chat: ', err);
+                    callback({ success: false, data: { msg: 'Something went wrong. Please try again.' } })
+                } else {
+                    if (chat) {
+                        chat.messages.push(data.message);
+                        chat.save(err => {
+                            if (err) {
+                                console.log('Error in saving message: ', err);
+                                callback({ success: false, data: { msg: 'Could not send message at this moment' } })
+                            } else {
+                                chat.participants.forEach(participant => {
+                                    if (participant._id != data.message.from) {
+                                        io.sockets.to(participant.socketId).emit('message', data);
+                                        callback({ success: true, data: { msg: 'Message sent successfully' } })
+                                    }
+                                })
+                            }
+                        })
+                    } else {
+                        console.log('Chat not found with id: ', data.chatId);
+                        callback({ success: false, data: { msg: 'Requested chat not found' } });
+                    }
+                }
+            })
     })
 });
 
